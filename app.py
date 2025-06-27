@@ -93,6 +93,7 @@ def main():
         margin-bottom: 1.5rem;
         border: 2px solid #e1e8ed;
         box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        color: black;  /* Changed text color to black */
     }
     
     /* Input box styling */
