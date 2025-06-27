@@ -96,7 +96,7 @@ def main():
         color: black;  /* Changed text color to black */
     }
     
-    /* Input box styling */
+    /* Input box styling - Changed text color to black */
     .stTextInput > div > div > input {
         background: linear-gradient(to right, #f8f9fa, #ffffff);
         border: 2px solid #667eea !important;
@@ -105,6 +105,7 @@ def main():
         font-size: 16px !important;
         box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
         transition: all 0.3s ease;
+        color: black !important;  /* Changed text color to black */
     }
 
     .stTextInput > div > div > input:focus {
@@ -453,8 +454,36 @@ def main():
         send_button = st.button("🚀 Send", use_container_width=True)
     st.markdown('</div>', unsafe_allow_html=True)
 
-    # Process user input
-    if send_button and user_input.strip():
+    # JavaScript to handle Enter key press
+    st.markdown("""
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const inputField = document.querySelector('input[aria-label="Type your question here..."]');
+        
+        if (inputField) {
+            inputField.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    // Find the Send button and click it
+                    const buttons = document.querySelectorAll('button');
+                    for (let button of buttons) {
+                        if (button.textContent.includes('🚀 Send')) {
+                            button.click();
+                            break;
+                        }
+                    }
+                }
+            });
+        }
+    });
+    </script>
+    """, unsafe_allow_html=True)
+
+    # Process user input when Send button is clicked or Enter is pressed
+    if (send_button or st.session_state.get("enter_pressed", False)) and user_input.strip():
+        # Reset enter_pressed flag
+        if "enter_pressed" in st.session_state:
+            del st.session_state.enter_pressed
+            
         user_message = {
             "role": "user",
             "content": user_input,
